@@ -14,6 +14,8 @@ var gameImg;
 
 var invisGround;
 
+var over, win;
+
 var turns = 3;
 var gameState = "start";
 
@@ -46,6 +48,9 @@ function preload(){
     emeraldImg = loadImage("imgs/emerald.png");
 
     gameImg = loadImage("imgs/game.png");
+
+    over = loadSound("sfx/over.mp3");
+    win = loadSound("sfx/win.mp3");
 }
 
 function setup() {
@@ -150,10 +155,12 @@ function draw() {
                 rocksGroup.destroyEach();
             }
             if(turns === 0){
+                over.play();
                 gameState = "over";
             }
         }
         if(stick.isTouching(emerald)){
+            win.play();
             gameState = "win";
         }
 
