@@ -6,7 +6,6 @@ var sky;
 
 var rock, rockImg, rocksGroup;
 var bird, birdImg, birdsGroup;
-var squirrel, squirrelAnim, squirrelsGroup;
 
 var emerald, emeraldImg;
 
@@ -22,16 +21,6 @@ function preload(){
 
     rockImg = loadImage("imgs/rock.png");
     birdImg = loadImage("imgs/bird.png");
-    
-    squirrelAnim = loadAnimation(
-        "imgs/squirrel/sq1.png",
-        "imgs/squirrel/sq2.png",
-        "imgs/squirrel/sq3.png",
-        "imgs/squirrel/sq4.png",
-        "imgs/squirrel/sq5.png",
-        "imgs/squirrel/sq6.png",
-        "imgs/squirrel/sq7.png"
-    );
 
     jump = loadAnimation("imgs/stick/jump.png");
     
@@ -75,12 +64,18 @@ function setup() {
 
     invisGround = createSprite(width/2, height/2+100, width, 5);
     invisGround.visible = false;
+
+    rocksGroup = createGroup();
+    birdsGroup = createGroup();
 }
 
 function draw() {
     background(sky);
 
     stick.collide(invisGround);
+
+    spawnRocks();
+    spawnBirds();
 
     stick.changeAnimation("standing");
     if(keyDown("right")){
@@ -99,7 +94,7 @@ function draw() {
         stick.addAnimation("jump", jump);
         stick.changeAnimation("jump");
 
-        stick.velocityY = -6;
+        stick.velocityY = -10;
     }
     stick.velocityY+=1;
     if(keyDown("down")){
@@ -108,4 +103,27 @@ function draw() {
     }
 
     drawSprites();
+}
+
+function spawnRocks(){
+    if(frameCount%90 === 0){
+        rock = createSprite(random(200, width-200), 10);
+        rock.addImage(rockImg);
+        rock.scale = random(0.05, 0.2);
+        rock.velocityY = 20;
+        rock.velocityY+=1;
+        rock.lifetime = 30;
+        rocksGroup.add(rock);
+    }
+}
+
+function spawnBirds(){
+    if(frameCount%50 === 0){
+        bird = createSprite(width+10, random(height/2-70, height/2+70));
+        bird.addImage(birdImg);
+        bird.scale = 0.1;
+        bird.velocityX = -15;
+        bird.lifetime = 90;
+        birdsGroup.add(bird);
+    }
 }
